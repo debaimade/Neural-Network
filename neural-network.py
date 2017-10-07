@@ -74,3 +74,20 @@ class layer:
 					i += 1
 			else:
 				eachNeuron.output()
+
+
+class network:
+	def __init__(self, numInputs, numHiddenLayers, numNeurons, numOutputs):
+		self.numInputs = numInputs
+		self.hiddenLayers = []
+		for i in xrange(numHiddenLayers):
+			self.hiddenLayers.append(layer(None, False, numNeurons, None))
+		for eachNeuron in self.hiddenLayers[-1]:
+			eachNeuron.isOutput = True
+		for eachNeuron in self.hiddenLayers[0].neurons:
+			eachNeuron.adjList.append(self.hiddenLayers[1].neurons)
+		for l in xrange(numHiddenLayers):
+			for n in xrange(numNeurons):
+				self.hiddenLayers[l].neurons[n].adjList.append(self.hiddenLayers[l - 1].neurons)
+				self.hiddenLayers[l].neurons[n].adjList.append(self.hiddenLayers[l + 1].neurons)
+
